@@ -3,7 +3,7 @@ package rsa.api;
 import java.math.BigInteger;
 
 @FunctionalInterface
-public interface RelativePrimeFinder {
+public interface RelativelyPrimeFinder {
 
 	BigInteger findRelativePrimeOf(BigInteger number);
 	
