@@ -27,5 +27,7 @@ Decryption example:
 * Last output number is `0x0001` (2 bytes).
 
 The padding information during encryption is appended to the last block automatically by `NaiveBlockInputStream` class.
+In case the last block size has the exact size, an additional block just with padding information (filled with `0xFF`) is appended by
+the encryption method at `Main`. 
 
 The padding information during decryption is handled by an anonymous inner class at `Main`, search for `wrappedBlockOutputStream`.
