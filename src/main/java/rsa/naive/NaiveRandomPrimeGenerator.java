@@ -1,31 +1,28 @@
 package rsa.naive;
 
 import java.math.BigInteger;
-import java.util.Optional;
 
-import rsa.api.PrimeNumber;
-import rsa.api.PrimeNumberConstructor;
+import rsa.api.PrimalityChecker;
 import rsa.api.RandomNumberGenerator;
 import rsa.api.RandomPrimeGenerator;
 
 public final class NaiveRandomPrimeGenerator implements RandomPrimeGenerator {
 	
 	private final RandomNumberGenerator randomNumberGenerator;
-	private final PrimeNumberConstructor primeNumberConstructor;
+	private final PrimalityChecker primalityChecker;
 	
-	public NaiveRandomPrimeGenerator(RandomNumberGenerator randomNumberGenerator, PrimeNumberConstructor primeNumberConstructor) {
+	public NaiveRandomPrimeGenerator(RandomNumberGenerator randomNumberGenerator, PrimalityChecker primalityChecker) {
 		this.randomNumberGenerator = randomNumberGenerator;
-		this.primeNumberConstructor = primeNumberConstructor;
+		this.primalityChecker = primalityChecker;
 	}
 
 	@Override
-	public PrimeNumber next() {
-		Optional<PrimeNumber> optPrimeNumber;
+	public BigInteger next() {
+		BigInteger randomNumber;
 		do {
-			BigInteger randomNumber = randomNumberGenerator.next();
-			optPrimeNumber = primeNumberConstructor.build(randomNumber);
-		} while (!optPrimeNumber.isPresent());
-		return optPrimeNumber.get();
+			randomNumber = randomNumberGenerator.next();
+		} while (!primalityChecker.test(randomNumber));
+		return randomNumber;
 	}
 
 }

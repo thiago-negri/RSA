@@ -28,8 +28,8 @@ public final class NaiveRSAKeyGenerator implements RSAKeyGenerator {
 	}
 
 	private RSAKey buildNewRSAKey() {
-		BigInteger p = randomPrimeGenerator.next().rawValue();
-		BigInteger q = randomPrimeGenerator.next().rawValue();
+		BigInteger p = randomPrimeGenerator.next();
+		BigInteger q = randomPrimeGenerator.next();
 		BigInteger n = p.multiply(q); // this is the modulus
 		BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // Euler's totient function
 		BigInteger e = relativelyPrimeFinder.findRelativePrimeOf(phi_n); // `e` must be a coprime of `phi_n`

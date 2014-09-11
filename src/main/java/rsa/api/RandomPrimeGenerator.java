@@ -1,8 +1,10 @@
 package rsa.api;
 
+import java.math.BigInteger;
+
 @FunctionalInterface
 public interface RandomPrimeGenerator {
 
-	PrimeNumber next();
+	BigInteger next();
 	
 }
