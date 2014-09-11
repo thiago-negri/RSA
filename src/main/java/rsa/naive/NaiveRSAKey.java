@@ -9,6 +9,7 @@ public final class NaiveRSAKey implements RSAKey {
 	private final Key publicKey;
 
 	public NaiveRSAKey(Key privateKey, Key publicKey) {
+		if (!privateKey.modulus().equals(publicKey.modulus())) throw new IllegalArgumentException();
 		this.privateKey = privateKey;
 		this.publicKey = publicKey;
 	}

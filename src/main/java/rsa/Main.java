@@ -3,20 +3,23 @@ package rsa;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.function.Function;
 
 import rsa.api.BigIntegerSink;
-import rsa.api.BigIntegerSinkConstructor;
 import rsa.api.BigIntegerStream;
-import rsa.api.BigIntegerStreamConstructor;
 import rsa.api.Key;
 import rsa.api.RSACracker;
-import rsa.api.RSAStrategy;
 import rsa.api.RSAKey;
 import rsa.api.RSAKeyGenerator;
 import rsa.api.RSAKeyReader;
 import rsa.api.RSAKeyWriter;
+import rsa.api.RSAStrategy;
 import rsa.api.StreamTransformer;
+import rsa.naive.NaiveBigIntegerSinkToOutputStream;
+import rsa.naive.NaiveBigIntegerStreamFromInputStream;
 
 public class Main {
 
@@ -74,8 +77,6 @@ public class Main {
 		String outputFileName = args[3];
 		
 		RSAKeyReader rsaKeyReader = strategy.rsaKeyReader();
-		BigIntegerStreamConstructor bigIntegerStreamConstructor = strategy.bigIntegerStreamConstructor();
-		BigIntegerSinkConstructor bigIntegerSinkConstructor = strategy.bigIntegerSinkConstructor();
 		StreamTransformer streamTransformer = strategy.streamTransformer();
 		
 		File rsaKeyFile = new File(rsaKeyFileName);
@@ -90,10 +91,14 @@ public class Main {
 		try (FileInputStream inputFileStream = new FileInputStream(inputFile);
 			 FileOutputStream outputFileStream = new FileOutputStream(outputFile)
 			) {
-			BigIntegerStream in = bigIntegerStreamConstructor.build(inputFileStream);
-			BigIntegerSink out = bigIntegerSinkConstructor.build(outputFileStream);
-			
 			Key key = getter.apply(rsaKey);
+			
+			// -1 to guarantee that the block will never have a number bigger than the modulus
+			int bitLength = key.bitLength() - 1;
+			
+			BigIntegerStream<IOException> in = buildBigIntegerStream(inputFileStream, bitLength);
+			BigIntegerSink<IOException> out = buildBigIntegerSink(outputFileStream);
+			
 			streamTransformer.transform(key, in, out);
 		}
 	}
@@ -120,4 +125,12 @@ public class Main {
 		}
 	}
 
+	private static BigIntegerSink<IOException> buildBigIntegerSink(OutputStream outputStream) {
+		return new NaiveBigIntegerSinkToOutputStream(outputStream);
+	}
+
+	private static BigIntegerStream<IOException> buildBigIntegerStream(InputStream inputStream, int bitLength) {
+		return new NaiveBigIntegerStreamFromInputStream(inputStream, bitLength);
+	}
+	
 }
