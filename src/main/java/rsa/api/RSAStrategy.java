@@ -8,10 +8,6 @@ public interface RSAStrategy {
 
 	StreamTransformer streamTransformer();
 
-	BigIntegerSinkConstructor bigIntegerSinkConstructor();
-
-	BigIntegerStreamConstructor bigIntegerStreamConstructor();
-
 	RSAKeyGenerator rsaKeyGenerator();
 
 	RSACracker rsaCracker();

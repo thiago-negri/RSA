@@ -7,5 +7,7 @@ public interface Key {
 	BigInteger exponent();
 	
 	BigInteger modulus();
+
+	int bitLength();
 	
 }

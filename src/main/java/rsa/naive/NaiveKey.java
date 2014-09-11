@@ -8,10 +8,13 @@ public final class NaiveKey implements Key {
 
 	private final BigInteger exponent;
 	private final BigInteger modulus;
+	private final int bitLength;
 
 	public NaiveKey(BigInteger exponent, BigInteger modulus) {
+		if (exponent.bitLength() > modulus.bitLength()) throw new IllegalArgumentException();
 		this.exponent = exponent;
 		this.modulus = modulus;
+		this.bitLength = modulus.bitLength();
 	}
 
 	@Override
@@ -22,6 +25,11 @@ public final class NaiveKey implements Key {
 	@Override
 	public BigInteger modulus() {
 		return modulus;
+	}
+
+	@Override
+	public int bitLength() {
+		return bitLength;
 	}
 
 }

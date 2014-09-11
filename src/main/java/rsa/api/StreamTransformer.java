@@ -3,6 +3,6 @@ package rsa.api;
 @FunctionalInterface
 public interface StreamTransformer {
 
-	void transform(Key key, BigIntegerStream in, BigIntegerSink out);
-
+	<E extends Throwable> void transform(BigIntegerStream<E> in, BigIntegerSink<E> out, BigIntegerTransformer<E> transformer) throws E;
+	
 }
