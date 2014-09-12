@@ -1,27 +1,30 @@
 package rsa.naive;
 
+import java.math.BigInteger;
+
 import rsa.api.Key;
 import rsa.api.RSAKey;
 
 public final class NaiveRSAKey implements RSAKey {
 
-	private final Key privateKey;
-	private final Key publicKey;
+	private final BigInteger publicExponent;
+	private final BigInteger privateExponent;
+	private final BigInteger modulus;
 
-	public NaiveRSAKey(Key privateKey, Key publicKey) {
-		if (!privateKey.modulus().equals(publicKey.modulus())) throw new IllegalArgumentException();
-		this.privateKey = privateKey;
-		this.publicKey = publicKey;
+	public NaiveRSAKey(BigInteger publicExponent, BigInteger privateExponent, BigInteger modulus) {
+		this.publicExponent = publicExponent;
+		this.privateExponent = privateExponent;
+		this.modulus = modulus;
 	}
 
 	@Override
 	public Key privateKey() {
-		return privateKey;
+		return new NaiveKey(privateExponent, modulus);
 	}
 
 	@Override
 	public Key publicKey() {
-		return publicKey;
+		return new NaiveKey(publicExponent, modulus);
 	}
 
 }

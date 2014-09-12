@@ -26,12 +26,15 @@ import rsa.naive.NaiveBigIntegerSinkToOutputStream;
 import rsa.naive.NaiveBigIntegerStreamFromInputStream;
 import rsa.naive.NaiveBlockInputStream;
 import rsa.naive.NaiveBlockOutputStream;
+import rsa.naive.NaiveRSAStrategy;
 
 public class Main {
 
+	private static final int KEY_BIT_LENGTH = 32;
+	
 	private static final RSAStrategy strategy = getRSAStrategy();
 	private static RSAStrategy getRSAStrategy() {
-		return null;
+		return new NaiveRSAStrategy(KEY_BIT_LENGTH);
 	}
 	
 	public static void main(String[] args) throws Exception {

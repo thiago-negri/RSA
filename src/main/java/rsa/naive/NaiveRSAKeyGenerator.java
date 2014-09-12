@@ -2,7 +2,6 @@ package rsa.naive;
 
 import java.math.BigInteger;
 
-import rsa.api.Key;
 import rsa.api.MultiplicativeInverseFinder;
 import rsa.api.RSAKey;
 import rsa.api.RSAKeyGenerator;
@@ -34,9 +33,12 @@ public final class NaiveRSAKeyGenerator implements RSAKeyGenerator {
 		BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // Euler's totient function
 		BigInteger e = relativelyPrimeFinder.findRelativePrimeOf(phi_n); // `e` must be a coprime of `phi_n`
 		BigInteger d = multiplicativeInverseFinder.findMultiplicativeInverseOf(e, phi_n); // `d` is the multiplicative inverse of `phi_n`, may be solved by extended Euclidian algorithm
-		Key publicKey = new NaiveKey(e, n);
-		Key privateKey = new NaiveKey(d, n);
-		RSAKey rsaKey = new NaiveRSAKey(privateKey, publicKey);
+		
+		BigInteger publicExponent = e;
+		BigInteger privateExponent = d;
+		BigInteger modulus = n;
+		
+		RSAKey rsaKey = new NaiveRSAKey(publicExponent, privateExponent, modulus);
 		return rsaKey;
 	}
 
