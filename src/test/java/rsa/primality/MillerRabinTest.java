@@ -1,4 +1,4 @@
-package rsa.primality.test;
+package rsa.primality;
 
 import java.math.BigInteger;
 
