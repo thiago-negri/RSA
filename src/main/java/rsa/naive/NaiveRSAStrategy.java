@@ -11,6 +11,7 @@ import rsa.api.RandomNumberGenerator;
 import rsa.api.RandomPrimeGenerator;
 import rsa.api.RelativelyPrimeFinder;
 import rsa.api.StreamTransformer;
+import rsa.primality.EuclideanFinder;
 import rsa.primality.MillerRabin;
 
 public final class NaiveRSAStrategy implements RSAStrategy {
@@ -23,14 +24,12 @@ public final class NaiveRSAStrategy implements RSAStrategy {
 
 	@Override
 	public RSAKeyReader rsaKeyReader() {
-		// TODO Auto-generated method stub
-		return null;
+		return new NaiveRSAKeyReader();
 	}
 
 	@Override
 	public RSAKeyWriter rsaKeyWriter() {
-		// TODO Auto-generated method stub
-		return null;
+		return new NaiveRSAKeyWriter();
 	}
 
 	@Override
@@ -67,13 +66,11 @@ public final class NaiveRSAStrategy implements RSAStrategy {
 	}
 
 	private RelativelyPrimeFinder relativelyPrimeFinder() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EuclideanFinder();
 	}
 
 	private MultiplicativeInverseFinder multiplicativeInverseFinder() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EuclideanFinder();
 	}
 	
 }
