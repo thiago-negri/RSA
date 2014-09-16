@@ -18,7 +18,7 @@ public final class NaiveBlockOutputStream implements BlockOutputStream<IOExcepti
     @Override
     public void offer(byte[] buffer) throws IOException {
         if (buffer.length > blockSizeInBytes) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("len: " + buffer.length + ", max: " + blockSizeInBytes);
         }
         byte[] bufferToWrite;
         if (buffer.length < blockSizeInBytes) {

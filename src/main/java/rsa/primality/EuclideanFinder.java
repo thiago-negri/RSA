@@ -28,7 +28,6 @@ public class EuclideanFinder implements RelativelyPrimeFinder, MultiplicativeInv
 
         // Repeat the process while we did not find the GCD
         while (!newRemainder.equals(BigInteger.ZERO)) {
-            System.out.println("quotient = " + quotient);
             quotient = remainder.divide(newRemainder);
 
             // Performs the calculation of the inverse candidate (x) based on Euclidean Extended Algorithm  
@@ -86,11 +85,11 @@ public class EuclideanFinder implements RelativelyPrimeFinder, MultiplicativeInv
         BigInteger tmp = BigInteger.ZERO;
         BigInteger a = n1;
         BigInteger b = n2;
-        //Repeat until we hit an integer division
+        // Repeat until we hit an integer division
         while (!b.equals(BigInteger.ZERO)) {
             tmp = b;
-            b = a.mod(b); //Calculates the latest remainder (k-1)
-            a = tmp; //Set the next remainder k 
+            b = a.mod(b); // Calculates the latest remainder (k-1)
+            a = tmp; // Set the next remainder k 
         }
         return a;
     }

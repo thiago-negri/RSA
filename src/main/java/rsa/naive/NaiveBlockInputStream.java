@@ -30,9 +30,9 @@ public final class NaiveBlockInputStream implements BlockInputStream<IOException
         if (readBytes < 0) {
             return Optional.empty();
         }
-        if (readBytes < blockSizeInBytes) {
+        if ((readBytes + 1) < blockSizeInBytes) {
             // padding information in last block
-            Arrays.fill(buffer, readBytes + 1, readBytes, (byte) 0xFF);
+            Arrays.fill(buffer, readBytes + 1, blockSizeInBytes, (byte) 0xFF);
         }
         lastBlockSize = readBytes;
         return Optional.of(buffer);

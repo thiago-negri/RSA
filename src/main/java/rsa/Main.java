@@ -105,8 +105,8 @@ public class Main {
             int bitLength = key.bitLength();
             int inputBitLength = calculateInputBitLength.apply(bitLength);
             int outputBitLength = calculateOutputBitLength.apply(bitLength);
-            int inputBlockSizeInBytes = inputBitLength / 8;
-            int outputBlockSizeInBytes = outputBitLength / 8;
+            int inputBlockSizeInBytes = (int) Math.ceil(inputBitLength / 8.0d) - 1;
+            int outputBlockSizeInBytes = (int) Math.ceil(outputBitLength / 8.0d);
 
             final BlockInputStream<IOException> blockInputStream = buildBlockInputStream(inputFileStream, inputBlockSizeInBytes);
             BlockOutputStream<IOException> blockOutputStream = buildBlockOutputStream(outputFileStream, outputBlockSizeInBytes);
@@ -156,8 +156,8 @@ public class Main {
             int bitLength = key.bitLength();
             int inputBitLength = calculateInputBitLength.apply(bitLength);
             int outputBitLength = calculateOutputBitLength.apply(bitLength);
-            int inputBlockSizeInBytes = inputBitLength / 8;
-            int outputBlockSizeInBytes = outputBitLength / 8;
+            int inputBlockSizeInBytes = (int) Math.ceil(inputBitLength / 8.0d);
+            int outputBlockSizeInBytes = (int) Math.ceil(outputBitLength / 8.0d) - 1;
 
             final BlockInputStream<IOException> blockInputStream = buildBlockInputStream(inputFileStream, inputBlockSizeInBytes);
             BlockOutputStream<IOException> blockOutputStream = buildBlockOutputStream(outputFileStream, outputBlockSizeInBytes);
@@ -170,17 +170,11 @@ public class Main {
                     for (; i >= 0 && buffer[i] == (byte) 0xFF; --i) {
                         ;
                     }
-                    i--;
-                    if (i > 0) {
+                    if (i <= 0) {
                         return;
                     }
-                    int qtyOfPaddedBytes = i;
-                    int realBuferSize = buffer.length - qtyOfPaddedBytes;
-
-                    byte[] bufferWithoutPaddingInformation = new byte[realBuferSize];
-                    System.arraycopy(buffer, 0, bufferWithoutPaddingInformation, 0, realBuferSize);
-
-                    int lastBlockSizeInBytes = outputBlockSizeInBytes - qtyOfPaddedBytes;
+                    int lastBlockSizeInBytes = i;
+                    byte[] bufferWithoutPaddingInformation = Arrays.copyOfRange(buffer, 0, i);
                     BlockOutputStream<IOException> lastBlockOutputStream = buildBlockOutputStream(outputFileStream, lastBlockSizeInBytes);
                     lastBlockOutputStream.offer(bufferWithoutPaddingInformation);
                 }

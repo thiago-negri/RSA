@@ -3,6 +3,7 @@ package rsa.primality;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ public class EuclideanFinderTest {
     @Test
     public void inverse() {
         EuclideanFinder eFinder = new EuclideanFinder();
-        assertEquals(BigInteger.valueOf(113), eFinder.findMultiplicativeInverseOf(BigInteger.valueOf(17), BigInteger.valueOf(120)));
+        assertEquals(Optional.of(BigInteger.valueOf(113)), eFinder.findMultiplicativeInverseOf(BigInteger.valueOf(17), BigInteger.valueOf(120)));
     }
 
     @Test
