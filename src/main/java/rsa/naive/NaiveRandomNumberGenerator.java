@@ -7,17 +7,17 @@ import rsa.api.RandomNumberGenerator;
 
 public final class NaiveRandomNumberGenerator implements RandomNumberGenerator {
 
-	private final int numBits;
-	private final Random rnd;
+    private final int numBits;
+    private final Random rnd;
 
-	public NaiveRandomNumberGenerator(int numBits) {
-		this.numBits = numBits;
-		rnd = new Random();
-	}
+    public NaiveRandomNumberGenerator(int numBits) {
+        this.numBits = numBits;
+        rnd = new Random();
+    }
 
-	@Override
-	public BigInteger next() {
-		return new BigInteger(numBits, rnd);
-	}
+    @Override
+    public BigInteger next() {
+        return new BigInteger(numBits, rnd);
+    }
 
 }

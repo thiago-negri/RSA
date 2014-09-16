@@ -2,14 +2,14 @@ package rsa.api;
 
 public interface RSAStrategy {
 
-	RSAKeyReader rsaKeyReader();
+    RSAKeyReader rsaKeyReader();
 
-	RSAKeyWriter rsaKeyWriter();
+    RSAKeyWriter rsaKeyWriter();
 
-	StreamTransformer streamTransformer();
+    StreamTransformer streamTransformer();
 
-	RSAKeyGenerator rsaKeyGenerator();
+    RSAKeyGenerator rsaKeyGenerator();
 
-	RSACracker rsaCracker();
+    RSACracker rsaCracker();
 
 }

@@ -4,10 +4,10 @@ import java.util.Optional;
 
 public interface BlockInputStream<E extends Throwable> {
 
-	boolean hasNext() throws E;
+    boolean hasNext() throws E;
 
-	Optional<byte[]> next() throws E;
+    Optional<byte[]> next() throws E;
 
-	int lastBlockSize();
-	
+    int lastBlockSize();
+
 }

@@ -6,6 +6,6 @@ import java.io.OutputStream;
 @FunctionalInterface
 public interface RSAKeyWriter {
 
-	void write(RSAKey key, OutputStream out) throws IOException;
-	
+    void write(RSAKey key, OutputStream out) throws IOException;
+
 }

@@ -6,6 +6,6 @@ import java.util.Optional;
 /** Extended Euclidian Algorithm */
 public interface MultiplicativeInverseFinder {
 
-	Optional<BigInteger> findMultiplicativeInverseOf(BigInteger number, BigInteger modulus);
+    Optional<BigInteger> findMultiplicativeInverseOf(BigInteger number, BigInteger modulus);
 
 }

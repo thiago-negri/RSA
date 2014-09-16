@@ -4,10 +4,10 @@ import java.math.BigInteger;
 
 public interface Key {
 
-	BigInteger exponent();
-	
-	BigInteger modulus();
+    BigInteger exponent();
 
-	int bitLength();
-	
+    BigInteger modulus();
+
+    int bitLength();
+
 }

@@ -15,62 +15,62 @@ import rsa.primality.EuclideanFinder;
 import rsa.primality.MillerRabin;
 
 public final class NaiveRSAStrategy implements RSAStrategy {
-	
-	private final int keyBitLength;
 
-	public NaiveRSAStrategy(int keyBitLength) {
-		this.keyBitLength = keyBitLength;
-	}
+    private final int keyBitLength;
 
-	@Override
-	public RSAKeyReader rsaKeyReader() {
-		return new NaiveRSAKeyReader();
-	}
+    public NaiveRSAStrategy(int keyBitLength) {
+        this.keyBitLength = keyBitLength;
+    }
 
-	@Override
-	public RSAKeyWriter rsaKeyWriter() {
-		return new NaiveRSAKeyWriter();
-	}
+    @Override
+    public RSAKeyReader rsaKeyReader() {
+        return new NaiveRSAKeyReader();
+    }
 
-	@Override
-	public StreamTransformer streamTransformer() {
-		return new NaiveStreamTransformer();
-	}
+    @Override
+    public RSAKeyWriter rsaKeyWriter() {
+        return new NaiveRSAKeyWriter();
+    }
 
-	@Override
-	public RSAKeyGenerator rsaKeyGenerator() {
-		RandomPrimeGenerator randomPrimeGenerator = randomPrimeGenerator();
-		RelativelyPrimeFinder relativelyPrimeFinder = relativelyPrimeFinder();
-		MultiplicativeInverseFinder multiplicativeInverseFinder = multiplicativeInverseFinder();
-		return new NaiveRSAKeyGenerator(randomPrimeGenerator, relativelyPrimeFinder, multiplicativeInverseFinder);
-	}
+    @Override
+    public StreamTransformer streamTransformer() {
+        return new NaiveStreamTransformer();
+    }
 
-	@Override
-	public RSACracker rsaCracker() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public RSAKeyGenerator rsaKeyGenerator() {
+        RandomPrimeGenerator randomPrimeGenerator = randomPrimeGenerator();
+        RelativelyPrimeFinder relativelyPrimeFinder = relativelyPrimeFinder();
+        MultiplicativeInverseFinder multiplicativeInverseFinder = multiplicativeInverseFinder();
+        return new NaiveRSAKeyGenerator(randomPrimeGenerator, relativelyPrimeFinder, multiplicativeInverseFinder);
+    }
 
-	private RandomPrimeGenerator randomPrimeGenerator() {
-		RandomNumberGenerator randomNumberGenerator = randomNumberGenerator();
-		PrimalityChecker primalityChecker = primalityChecker();
-		return new NaiveRandomPrimeGenerator(randomNumberGenerator, primalityChecker);
-	}
+    @Override
+    public RSACracker rsaCracker() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	private RandomNumberGenerator randomNumberGenerator() {
-		return new NaiveRandomNumberGenerator(keyBitLength);
-	}
+    private RandomPrimeGenerator randomPrimeGenerator() {
+        RandomNumberGenerator randomNumberGenerator = randomNumberGenerator();
+        PrimalityChecker primalityChecker = primalityChecker();
+        return new NaiveRandomPrimeGenerator(randomNumberGenerator, primalityChecker);
+    }
 
-	private PrimalityChecker primalityChecker() {
-		return new MillerRabin();
-	}
+    private RandomNumberGenerator randomNumberGenerator() {
+        return new NaiveRandomNumberGenerator(keyBitLength);
+    }
 
-	private RelativelyPrimeFinder relativelyPrimeFinder() {
-		return new EuclideanFinder();
-	}
+    private PrimalityChecker primalityChecker() {
+        return new MillerRabin();
+    }
 
-	private MultiplicativeInverseFinder multiplicativeInverseFinder() {
-		return new EuclideanFinder();
-	}
-	
+    private RelativelyPrimeFinder relativelyPrimeFinder() {
+        return new EuclideanFinder();
+    }
+
+    private MultiplicativeInverseFinder multiplicativeInverseFinder() {
+        return new EuclideanFinder();
+    }
+
 }

@@ -5,6 +5,6 @@ import java.math.BigInteger;
 @FunctionalInterface
 public interface RelativelyPrimeFinder {
 
-	BigInteger findRelativePrimeOf(BigInteger number);
-	
+    BigInteger findRelativePrimeOf(BigInteger number);
+
 }

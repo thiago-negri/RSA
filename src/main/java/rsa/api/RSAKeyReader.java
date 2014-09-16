@@ -6,6 +6,6 @@ import java.io.InputStream;
 @FunctionalInterface
 public interface RSAKeyReader {
 
-	RSAKey read(InputStream in) throws IOException;
-	
+    RSAKey read(InputStream in) throws IOException;
+
 }

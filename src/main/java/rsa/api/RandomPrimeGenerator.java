@@ -5,6 +5,6 @@ import java.math.BigInteger;
 @FunctionalInterface
 public interface RandomPrimeGenerator {
 
-	BigInteger next();
-	
+    BigInteger next();
+
 }
