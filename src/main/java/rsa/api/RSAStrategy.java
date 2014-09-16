@@ -8,7 +8,7 @@ public interface RSAStrategy {
 
     StreamTransformer streamTransformer();
 
-    RSAKeyGenerator rsaKeyGenerator();
+    RSAKeyGenerator rsaKeyGenerator(int keyBitLength);
 
     RSACracker rsaCracker();
 

@@ -26,9 +26,9 @@ public class NaiveRSAStrategyTest {
 
     @Test
     public void rsaKeyGeneration() {
-        RSAStrategy strategy = new NaiveRSAStrategy(256);
+        RSAStrategy strategy = new NaiveRSAStrategy();
 
-        RSAKeyGenerator generator = strategy.rsaKeyGenerator();
+        RSAKeyGenerator generator = strategy.rsaKeyGenerator(256);
         RSAKey key = generator.next();
 
         Key privateKey = key.privateKey();
@@ -44,10 +44,10 @@ public class NaiveRSAStrategyTest {
     }
 
     @Test
-    public void test() throws IOException {
-        RSAStrategy strategy = new NaiveRSAStrategy(256);
+    public void encodeDecode() throws IOException {
+        RSAStrategy strategy = new NaiveRSAStrategy();
 
-        RSAKeyGenerator generator = strategy.rsaKeyGenerator();
+        RSAKeyGenerator generator = strategy.rsaKeyGenerator(256);
         RSAKey key = generator.next();
 
         Key privateKey = key.privateKey();

@@ -16,10 +16,7 @@ import rsa.primality.MillerRabin;
 
 public final class NaiveRSAStrategy implements RSAStrategy {
 
-    private final int keyBitLength;
-
-    public NaiveRSAStrategy(int keyBitLength) {
-        this.keyBitLength = keyBitLength;
+    public NaiveRSAStrategy() {
     }
 
     @Override
@@ -38,8 +35,8 @@ public final class NaiveRSAStrategy implements RSAStrategy {
     }
 
     @Override
-    public RSAKeyGenerator rsaKeyGenerator() {
-        RandomPrimeGenerator randomPrimeGenerator = randomPrimeGenerator();
+    public RSAKeyGenerator rsaKeyGenerator(int keyBitLength) {
+        RandomPrimeGenerator randomPrimeGenerator = randomPrimeGenerator(keyBitLength);
         RelativelyPrimeFinder relativelyPrimeFinder = relativelyPrimeFinder();
         MultiplicativeInverseFinder multiplicativeInverseFinder = multiplicativeInverseFinder();
         return new NaiveRSAKeyGenerator(randomPrimeGenerator, relativelyPrimeFinder, multiplicativeInverseFinder);
@@ -51,13 +48,13 @@ public final class NaiveRSAStrategy implements RSAStrategy {
         return null;
     }
 
-    private RandomPrimeGenerator randomPrimeGenerator() {
-        RandomNumberGenerator randomNumberGenerator = randomNumberGenerator();
+    private RandomPrimeGenerator randomPrimeGenerator(int keyBitLength) {
+        RandomNumberGenerator randomNumberGenerator = randomNumberGenerator(keyBitLength);
         PrimalityChecker primalityChecker = primalityChecker();
         return new NaiveRandomPrimeGenerator(randomNumberGenerator, primalityChecker);
     }
 
-    private RandomNumberGenerator randomNumberGenerator() {
+    private RandomNumberGenerator randomNumberGenerator(int keyBitLength) {
         return new NaiveRandomNumberGenerator(keyBitLength);
     }
 

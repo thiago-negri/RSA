@@ -30,12 +30,10 @@ import rsa.naive.NaiveRSAStrategy;
 
 public class Main {
 
-    private static final int KEY_BIT_LENGTH = 32;
-
     private static final RSAStrategy strategy = getRSAStrategy();
 
     private static RSAStrategy getRSAStrategy() {
-        return new NaiveRSAStrategy(KEY_BIT_LENGTH);
+        return new NaiveRSAStrategy();
     }
 
     public static void main(String[] args) throws Exception {
@@ -61,9 +59,10 @@ public class Main {
 
     private static void generateKey(String[] args) throws Exception {
         String outputFileName = args[1];
+        int keySizeInBits = Integer.parseInt(args[2]);
         File outputFile = new File(outputFileName);
 
-        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator();
+        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(keySizeInBits);
         RSAKeyWriter rsaKeyWriter = strategy.rsaKeyWriter();
 
         RSAKey key = rsaKeyGenerator.next();
