@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -43,6 +44,10 @@ public class Main {
                 generateKey(args);
                 break;
 
+            case "measure":
+                measure(args);
+                break;
+
             case "encode":
                 encode(args);
                 break;
@@ -54,21 +59,77 @@ public class Main {
             case "crack":
                 crack(args);
                 break;
+
+            default:
+                throw new RuntimeException(function);
+        }
+    }
+
+    private static void measure(String[] args) throws Exception {
+        String measureFileName = args[1];
+        File measureFile = new File(measureFileName);
+        int from = Integer.parseInt(args[2]);
+        int to = Integer.parseInt(args[3]);
+        int step = Integer.parseInt(args[4]);
+
+        String[] args$ = new String[args.length - 5];
+        System.arraycopy(args, 5, args$, 0, args$.length);
+
+        int ix = -1;
+        for (int i = 0; i < args$.length; ++i) {
+            if (args$[i].equals("$")) {
+                ix = i;
+                break;
+            }
+        }
+
+        if (ix < 0) {
+            throw new RuntimeException();
+        }
+
+        try (PrintStream fos = new PrintStream(measureFile)) {
+            fos.println("\"Command\",\"Ix\",\"Time (ns)\"");
+            for (int i = from; i <= to; i += step) {
+                args$[ix] = Integer.toString(i);
+
+                StringBuilder cmdBuilder = new StringBuilder();
+                cmdBuilder.append(args$[0]);
+                for (int j = 1; j < args$.length; ++j) {
+                    cmdBuilder.append(' ');
+                    cmdBuilder.append(args$[j]);
+                }
+                String cmd = cmdBuilder.toString();
+
+                System.out.println("> " + cmd);
+
+                long a = System.nanoTime();
+                main(args$);
+                long b = System.nanoTime();
+                fos.println("\"" + cmd + "\",\"" + i + "\",\"" + (b - a) + "\"");
+            }
         }
     }
 
     private static void generateKey(String[] args) throws Exception {
-        String outputFileName = args[1];
-        int keySizeInBits = Integer.parseInt(args[2]);
-        File outputFile = new File(outputFileName);
+        int keySizeInBits = Integer.parseInt(args[1]);
 
         RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(keySizeInBits);
         RSAKeyWriter rsaKeyWriter = strategy.rsaKeyWriter();
 
         RSAKey key = rsaKeyGenerator.next();
 
-        try (FileOutputStream out = new FileOutputStream(outputFile)) {
-            rsaKeyWriter.write(key, out);
+        if (args.length > 2) {
+            String outputFileName = args[2];
+            if (!outputFileName.equals("stdout")) {
+                File outputFile = new File(outputFileName);
+                try (FileOutputStream out = new FileOutputStream(outputFile)) {
+                    rsaKeyWriter.write(key, out);
+                }
+            } else {
+                System.out.println("   public : " + key.publicKey().exponent());
+                System.out.println("   private: " + key.privateKey().exponent());
+                System.out.println("   modulus: " + key.privateKey().modulus());
+            }
         }
     }
 

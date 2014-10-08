@@ -4,38 +4,43 @@ import java.math.BigInteger;
 import java.util.BitSet;
 
 import rsa.api.Key;
+import rsa.api.MultiplicativeInverseFinder;
 import rsa.api.RSACracker;
+import rsa.api.RelativelyPrimeFinder;
 import rsa.naive.NaiveKey;
 
 public final class NaiveRSACracker implements RSACracker {
 
-    // WORK IN PROGRESS
+    private final RelativelyPrimeFinder relativelyPrimeFinder;
+    private final MultiplicativeInverseFinder multiplicativeInverseFinder;
 
-    public static void main(String[] args) {
-        Key publicKey = new NaiveKey(new BigInteger("3"), new BigInteger("637642431782093011"));
-        new NaiveRSACracker().findPrivateKeyOf(publicKey);
+    public NaiveRSACracker(RelativelyPrimeFinder relativelyPrimeFinder, MultiplicativeInverseFinder multiplicativeInverseFinder) {
+        this.relativelyPrimeFinder = relativelyPrimeFinder;
+        this.multiplicativeInverseFinder = multiplicativeInverseFinder;
     }
 
     @Override
     public Key findPrivateKeyOf(Key publicKey) {
         BigInteger n = publicKey.modulus();
         BigInteger sqrt = sqrt(n);
-        System.out.println("Sqrt: " + sqrt);
         BigInteger trial = sqrt.add(BigInteger.valueOf(4));
         BigInteger p;
         if (trial.remainder(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) /* is pair */{
             trial = trial.add(BigInteger.ONE);
         }
         p = trial;
-        while (!n.remainder(trial).equals(BigInteger.ZERO)) {
+        while (n.compareTo(BigInteger.ZERO) > 0 && !n.remainder(trial).equals(BigInteger.ZERO)) {
             trial = trial.subtract(BigInteger.valueOf(2));
             p = trial;
         }
         BigInteger q = n.divide(p);
 
-        System.out.println("p: " + p);
-        System.out.println("q: " + q);
-        return null;
+        BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // Euler's totient function
+        BigInteger e = relativelyPrimeFinder.findRelativePrimeOf(phi_n); // `e` must be a coprime of `phi_n`
+        //optional get should be safe since we are handling with prime numbers...
+        BigInteger d = multiplicativeInverseFinder.findMultiplicativeInverseOf(e, phi_n).get(); // `d` is the multiplicative inverse of `phi_n`, may be solved by extended Euclidian algorithm
+
+        return new NaiveKey(d, n);
     }
 
     private BigInteger sqrt(BigInteger num) {
@@ -61,7 +66,6 @@ public final class NaiveRSACracker implements RSACracker {
         bit = lastBit;
 
         while (!bit.equals(BigInteger.ZERO)) {
-            System.out.println("In loop at " + bit);
             BigInteger resPlusBit = res.add(bit);
             if (num.compareTo(resPlusBit) >= 0) {
                 num = num.subtract(resPlusBit);

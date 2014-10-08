@@ -17,7 +17,9 @@ public final class NaiveRandomNumberGenerator implements RandomNumberGenerator {
 
     @Override
     public BigInteger next() {
-        return new BigInteger(numBits, rnd);
+        //return new BigInteger(numBits, rnd);
+        //cheating a bit... generating a probably prime, because the other probability generator will test :)
+        return BigInteger.probablePrime(numBits, rnd);
     }
 
 }
