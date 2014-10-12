@@ -15,7 +15,7 @@ import rsa.api.PrimalityChecker;
  */
 public class MillerRabin implements PrimalityChecker {
 
-    private static final int ACCURACY = 50;
+    public static final int ACCURACY = 50;
     private final Random random;
 
     public MillerRabin() {

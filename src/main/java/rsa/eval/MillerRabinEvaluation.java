@@ -34,6 +34,12 @@ public class MillerRabinEvaluation {
 		}
 		writer.close();
 		
+		Double accuracy = new Double(3.0/4.0);
+		for(int i=0; i < MillerRabin.ACCURACY; i++) {
+			accuracy *= 3.0/4.0;
+		}
+		System.out.println("Probability: " + accuracy);
+		
 	}
 	
 	private static long eval(BigInteger n) {
