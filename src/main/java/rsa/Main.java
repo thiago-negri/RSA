@@ -271,7 +271,7 @@ public class Main {
 
         Key publicKey = rsaKey.publicKey();
 
-        RSACracker cracker = strategy.rsaCracker(publicKey.bitLength());
+        RSACracker cracker = strategy.rsaCracker();
         Key privateKey = cracker.findPrivateKeyOf(publicKey);
 
         if (!privateKey.equals(rsaKey.privateKey())) {
