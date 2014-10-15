@@ -22,17 +22,26 @@ public final class NaiveRSACracker implements RSACracker {
     @Override
     public Key findPrivateKeyOf(Key publicKey) {
         BigInteger n = publicKey.modulus();
-        BigInteger sqrt = sqrt(n);
-        BigInteger trial = sqrt.add(BigInteger.valueOf(4));
+        BigInteger top = sqrt(n).multiply(BigInteger.valueOf(2));
+        BigInteger bottom = top.divide(BigInteger.valueOf(2));
+        BigInteger trial = bottom;
         BigInteger p;
-        if (trial.remainder(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) /* is pair */{
+        // ensure odd
+        if (!trial.testBit(0)) {
             trial = trial.add(BigInteger.ONE);
         }
-        p = trial;
-        while (n.compareTo(BigInteger.ZERO) > 0 && !n.remainder(trial).equals(BigInteger.ZERO)) {
-            trial = trial.subtract(BigInteger.valueOf(2));
-            p = trial;
+        while (trial.compareTo(BigInteger.ZERO) > 0) {
+            while (trial.compareTo(top) < 0 && !n.remainder(trial).equals(BigInteger.ZERO)) {
+                trial = trial.nextProbablePrime();
+            }
+            if (n.remainder(trial).equals(BigInteger.ZERO)) {
+                break;
+            }
+            top = bottom;
+            bottom = top.divide(BigInteger.valueOf(2));
+            trial = bottom;
         }
+        p = trial;
         BigInteger q = n.divide(p);
 
         BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // Euler's totient function

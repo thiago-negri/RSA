@@ -11,6 +11,7 @@ import rsa.api.RandomNumberGenerator;
 import rsa.api.RandomPrimeGenerator;
 import rsa.api.RelativelyPrimeFinder;
 import rsa.api.StreamTransformer;
+import rsa.cracker.NaiveRSACracker;
 import rsa.primality.EuclideanFinder;
 import rsa.primality.MillerRabin;
 
@@ -44,8 +45,7 @@ public final class NaiveRSAStrategy implements RSAStrategy {
 
     @Override
     public RSACracker rsaCracker() {
-        // TODO Auto-generated method stub
-        return null;
+        return new NaiveRSACracker(relativelyPrimeFinder(), multiplicativeInverseFinder());
     }
 
     private RandomPrimeGenerator randomPrimeGenerator(int keyBitLength) {

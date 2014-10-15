@@ -11,7 +11,7 @@ public final class NaiveRandomNumberGenerator implements RandomNumberGenerator {
     private final Random rnd;
 
     public NaiveRandomNumberGenerator(int numBits) {
-        this.numBits = numBits;
+        this.numBits = numBits / 2; // FIXME QUE LEGAL
         rnd = new Random();
     }
 
