@@ -10,6 +10,6 @@ public interface RSAStrategy {
 
     RSAKeyGenerator rsaKeyGenerator(int keyBitLength);
 
-    RSACracker rsaCracker();
+    RSACracker rsaCracker(int keyBitLength);
 
 }

@@ -168,6 +168,9 @@ public class Main {
             int inputBlockSizeInBytes = (int) Math.ceil(inputBitLength / 8.0d) - 1;
             int outputBlockSizeInBytes = (int) Math.ceil(outputBitLength / 8.0d);
 
+            System.out.println("Input block size: " + inputBitLength);
+            System.out.println("Output block size: " + outputBitLength);
+            
             final BlockInputStream<IOException> blockInputStream = buildBlockInputStream(inputFileStream, inputBlockSizeInBytes);
             BlockOutputStream<IOException> blockOutputStream = buildBlockOutputStream(outputFileStream, outputBlockSizeInBytes);
             BigIntegerStream<IOException> in = buildBigIntegerStream(blockInputStream);
@@ -268,7 +271,7 @@ public class Main {
 
         Key publicKey = rsaKey.publicKey();
 
-        RSACracker cracker = strategy.rsaCracker();
+        RSACracker cracker = strategy.rsaCracker(publicKey.bitLength());
         Key privateKey = cracker.findPrivateKeyOf(publicKey);
 
         if (!privateKey.equals(rsaKey.privateKey())) {
