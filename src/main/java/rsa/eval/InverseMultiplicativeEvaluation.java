@@ -32,7 +32,7 @@ public class InverseMultiplicativeEvaluation {
 			BigInteger e = euclideanFinder.findRelativePrimeOf(phi_n); // `e` must be a coprime of `phi_n`
 
 			BigInteger number = BigInteger.probablePrime(bits, random);
-			int average = 0;
+			long average = 0;
 			for(int i =0; i < repetition; i++) {
 				average += eval(e, phi_n);
 			}

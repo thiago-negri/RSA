@@ -26,7 +26,7 @@ public class RelativePrimeEvaluation {
 		//Com a execução feita 2x (a sem escrever em arquivo), a medição ficou estabilizada e distribuida o que me parece mais correto (os ruidos podem ser da iniclização da JVM ou cache).
 		while (bits <= 1024) {
 			BigInteger number = BigInteger.probablePrime(bits, random);
-			int average = 0;
+			long average = 0;
 			for(int i =0; i < repetition; i++) {
 				average += eval(number);
 			}

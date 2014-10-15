@@ -23,7 +23,7 @@ public class MillerRabinEvaluation {
 		writer.println("bits;nanoseconds");
 		while (bits <= 1024) {
 			BigInteger number = BigInteger.probablePrime(bits, random);
-			int average = 0;
+			long average = 0;
 			for(int i =0; i < repetition; i++) {
 				average += eval(number);
 			}
