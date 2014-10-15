@@ -27,12 +27,12 @@ public class CrackerEvaluation {
 
 		bits = 16;
 		while (bits <= 64) {
-			System.out.println("Evaluating  "+ bits + " key at " + new Date()); 
-	        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(bits);
-	        RSAKey rsaKey = rsaKeyGenerator.next();
+		    RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(bits);
+		    RSAKey rsaKey = rsaKeyGenerator.next();
+			System.out.println("Evaluating  "+ rsaKey.privateKey().modulus().bitLength() + " key at " + new Date()); 
 	        Key publicKey = rsaKey.publicKey();
 
-		        RSACracker cracker = strategy.rsaCracker(publicKey.bitLength());
+		        RSACracker cracker = strategy.rsaCracker();
 		        long average = 0;
 		        //for(int i =0; i < repetition; i++) {
 		        	long start = System.nanoTime();
@@ -45,6 +45,10 @@ public class CrackerEvaluation {
 		        //average = average/repetition;
 				System.out.println("\tAvg Time: " + average + " ns");
 				System.out.println("\tPrivate (" + privateKey.exponent() + ", " + privateKey.modulus()+ ")\n\tPublic (" + publicKey.exponent() + ", " + publicKey.modulus()+")\n\n");
+				
+				if (!(privateKey.exponent().equals(rsaKey.privateKey().exponent()) || !(privateKey.modulus().equals(rsaKey.privateKey().modulus()))))
+				        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Missed");
+				
 				writer.println(bits+";"+average);
 				bits += 1;
 		}
