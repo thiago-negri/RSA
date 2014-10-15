@@ -3,6 +3,7 @@ package rsa.eval;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import rsa.api.Key;
 import rsa.api.RSACracker;
@@ -18,15 +19,15 @@ public class CrackerEvaluation {
 
 		int bits = 16;
 		System.out.println("CrackerEvaluation");
-		PrintWriter writer = new PrintWriter("carcker-"+System.currentTimeMillis()+".csv", "UTF-8");
+		PrintWriter writer = new PrintWriter("cracker-"+System.currentTimeMillis()+".csv", "UTF-8");
 
 		writer.println("bits;nanoseconds");
 
 	    final RSAStrategy strategy = new NaiveRSAStrategy();
 
 		bits = 16;
-		while (bits <= 32) {
-			System.out.println("Evaluating  "+ bits + " key"); 
+		while (bits <= 64) {
+			System.out.println("Evaluating  "+ bits + " key at " + new Date()); 
 	        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(bits);
 	        RSAKey rsaKey = rsaKeyGenerator.next();
 	        Key publicKey = rsaKey.publicKey();
@@ -42,8 +43,8 @@ public class CrackerEvaluation {
 		        //}
 		        
 		        //average = average/repetition;
-				System.out.println("Bits: "+ bits + "\tAvg Time: " + average + " ns");
-				System.out.println("Private (" + privateKey.exponent() + ", " + privateKey.modulus()+ ")\nPublic (" + publicKey.exponent() + ", " + publicKey.modulus()+")\n\n");
+				System.out.println("\tAvg Time: " + average + " ns");
+				System.out.println("\tPrivate (" + privateKey.exponent() + ", " + privateKey.modulus()+ ")\n\tPublic (" + publicKey.exponent() + ", " + publicKey.modulus()+")\n\n");
 				writer.println(bits+";"+average);
 				bits += 1;
 		}
