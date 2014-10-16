@@ -113,10 +113,13 @@ public class Main {
     private static void generateKey(String[] args) throws Exception {
         int keySizeInBits = Integer.parseInt(args[1]);
 
-        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(keySizeInBits);
         RSAKeyWriter rsaKeyWriter = strategy.rsaKeyWriter();
+        RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(keySizeInBits);
 
-        RSAKey key = rsaKeyGenerator.next();
+        RSAKey key;
+        do {
+            key = rsaKeyGenerator.next();
+        } while (key.privateKey().bitLength() != keySizeInBits);
 
         if (args.length > 2) {
             String outputFileName = args[2];
@@ -134,8 +137,6 @@ public class Main {
     }
 
     private static void encode(String[] args) throws Exception {
-        Function<Integer, Integer> calculateInputBitLength = a -> a - 1; // -1 to guarantee all blocks will be less than modulus
-        Function<Integer, Integer> calculateOutputBitLength = Function.identity();
         Function<RSAKey, Key> getter = RSAKey::publicKey;
 
         // ---
@@ -162,15 +163,11 @@ public class Main {
 
         try (FileInputStream inputFileStream = new FileInputStream(inputFile);
                 FileOutputStream outputFileStream = new FileOutputStream(outputFile)) {
+            // encode
             int bitLength = key.bitLength();
-            int inputBitLength = calculateInputBitLength.apply(bitLength);
-            int outputBitLength = calculateOutputBitLength.apply(bitLength);
-            int inputBlockSizeInBytes = (int) Math.ceil(inputBitLength / 8.0d) - 1;
-            int outputBlockSizeInBytes = (int) Math.ceil(outputBitLength / 8.0d);
+            int inputBlockSizeInBytes = (int) Math.ceil(bitLength / 8.0d) - 1;
+            int outputBlockSizeInBytes = (int) Math.ceil(bitLength / 8.0d);
 
-            System.out.println("Input block size: " + inputBitLength);
-            System.out.println("Output block size: " + outputBitLength);
-            
             final BlockInputStream<IOException> blockInputStream = buildBlockInputStream(inputFileStream, inputBlockSizeInBytes);
             BlockOutputStream<IOException> blockOutputStream = buildBlockOutputStream(outputFileStream, outputBlockSizeInBytes);
             BigIntegerStream<IOException> in = buildBigIntegerStream(blockInputStream);
@@ -180,16 +177,15 @@ public class Main {
 
             // an ending padding block is required
             if (blockInputStream.lastBlockSize() == inputBlockSizeInBytes) {
-                byte[] paddingBlock = new byte[outputBlockSizeInBytes];
+                byte[] paddingBlock = new byte[inputBlockSizeInBytes];
                 Arrays.fill(paddingBlock, (byte) 0xFF);
-                blockOutputStream.offer(paddingBlock);
+                BigInteger lastNumber = new BigInteger(1, paddingBlock).modPow(exponent, modulus);
+                out.offer(lastNumber);
             }
         }
     }
 
     private static void decode(String[] args) throws Exception {
-        Function<Integer, Integer> calculateInputBitLength = Function.identity();
-        Function<Integer, Integer> calculateOutputBitLength = a -> a - 1;
         Function<RSAKey, Key> getter = RSAKey::privateKey;
 
         // ---
@@ -217,10 +213,8 @@ public class Main {
         try (FileInputStream inputFileStream = new FileInputStream(inputFile);
                 FileOutputStream outputFileStream = new FileOutputStream(outputFile)) {
             int bitLength = key.bitLength();
-            int inputBitLength = calculateInputBitLength.apply(bitLength);
-            int outputBitLength = calculateOutputBitLength.apply(bitLength);
-            int inputBlockSizeInBytes = (int) Math.ceil(inputBitLength / 8.0d);
-            int outputBlockSizeInBytes = (int) Math.ceil(outputBitLength / 8.0d) - 1;
+            int inputBlockSizeInBytes = (int) Math.ceil(bitLength / 8.0d);
+            int outputBlockSizeInBytes = (int) Math.ceil(bitLength / 8.0d) - 1;
 
             final BlockInputStream<IOException> blockInputStream = buildBlockInputStream(inputFileStream, inputBlockSizeInBytes);
             BlockOutputStream<IOException> blockOutputStream = buildBlockOutputStream(outputFileStream, outputBlockSizeInBytes);
@@ -235,6 +229,9 @@ public class Main {
                     }
                     if (i <= 0) {
                         return;
+                    }
+                    if (buffer[i] != (byte) 0x00) {
+                        i++;
                     }
                     int lastBlockSizeInBytes = i;
                     byte[] bufferWithoutPaddingInformation = Arrays.copyOfRange(buffer, 0, i);

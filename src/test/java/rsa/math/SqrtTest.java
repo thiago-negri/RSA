@@ -6,12 +6,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Random;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import rsa.math.sqrt.KarraSqrt;
 import rsa.math.sqrt.SqrtMethod;
 import rsa.math.sqrt.WikiSqrt;
 
+@Ignore
 public class SqrtTest {
 
 	@Test
