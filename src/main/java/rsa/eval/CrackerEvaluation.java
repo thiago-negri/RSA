@@ -24,12 +24,15 @@ public class CrackerEvaluation {
 
 		System.out.println("=============== Warming up =============");
 		warmup(32);
-		System.out.println("========================================");
 
 		System.out.println("=============== Measuring =============");
 		while (bits <= 64) {
 			RSAKeyGenerator rsaKeyGenerator = strategy.rsaKeyGenerator(bits);
 			RSAKey rsaKey = rsaKeyGenerator.next();
+			while (rsaKey.privateKey().modulus().bitLength() != bits) {
+				System.out.println("Trying to get key with exactly" + bits + " bits");
+				rsaKey = rsaKeyGenerator.next();
+			}
 			System.out.println("Evaluating  "+ rsaKey.privateKey().modulus().bitLength() + " key at " + new Date()); 
 			Key publicKey = rsaKey.publicKey();
 
