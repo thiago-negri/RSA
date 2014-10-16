@@ -16,7 +16,13 @@ public class CrackerEvaluation {
 
 	private static final RSAStrategy strategy = new NaiveRSAStrategy();
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, InterruptedException {
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, InterruptedException  {
+		for (int i=0; i < 6;i++) {
+			evaluate();
+		}
+	}
+	
+	public static void evaluate() throws FileNotFoundException, UnsupportedEncodingException, InterruptedException {
 		int bits = 8;
 		System.out.println("CrackerEvaluation");
 		PrintWriter writer = new PrintWriter("cracker-"+System.currentTimeMillis()+".csv", "UTF-8");
