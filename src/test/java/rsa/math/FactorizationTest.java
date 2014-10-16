@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.math.BigInteger;
 import java.util.Random;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import rsa.math.factorization.AmbdekarFactorization;
@@ -14,6 +15,7 @@ import rsa.math.factorization.NaiveFactorization;
 import rsa.math.sqrt.KarraSqrt;
 import rsa.math.sqrt.SqrtMethod;
 
+@Ignore
 public class FactorizationTest {
 
 	@Test
