@@ -25,29 +25,29 @@ public final class NaiveRSACracker implements RSACracker {
         BigInteger top = sqrt(n).multiply(BigInteger.valueOf(2));
         BigInteger bottom = top.divide(BigInteger.valueOf(2));
         BigInteger trial = bottom;
-        BigInteger p;
-        // ensure odd
-        if (!trial.testBit(0)) {
-            trial = trial.add(BigInteger.ONE);
-        }
-        while (trial.compareTo(BigInteger.ZERO) > 0) {
+
+        if (!trial.testBit(0)) trial = trial.add(BigInteger.ONE);
+
+        BigInteger p = null;
+        while (p == null && trial.compareTo(BigInteger.ZERO) > 0) {
             while (trial.compareTo(top) < 0 && !n.remainder(trial).equals(BigInteger.ZERO)) {
                 trial = trial.nextProbablePrime();
+                if (n.remainder(trial).equals(BigInteger.ZERO)) {
+                    p = trial;
+                    break;
+                }
             }
-            if (n.remainder(trial).equals(BigInteger.ZERO)) {
-                break;
+            if (p == null) {
+                top = bottom;
+                bottom = top.divide(BigInteger.valueOf(2));
+                trial = bottom;
             }
-            top = bottom;
-            bottom = top.divide(BigInteger.valueOf(2));
-            trial = bottom;
         }
-        p = trial;
-        BigInteger q = n.divide(p);
 
-        BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // Euler's totient function
-        BigInteger e = relativelyPrimeFinder.findRelativePrimeOf(phi_n); // `e` must be a coprime of `phi_n`
-        //optional get should be safe since we are handling with prime numbers...
-        BigInteger d = multiplicativeInverseFinder.findMultiplicativeInverseOf(e, phi_n).get(); // `d` is the multiplicative inverse of `phi_n`, may be solved by extended Euclidian algorithm
+        BigInteger q = n.divide(p);
+        BigInteger phi_n = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        BigInteger e = relativelyPrimeFinder.findRelativePrimeOf(phi_n);
+        BigInteger d = multiplicativeInverseFinder.findMultiplicativeInverseOf(e, phi_n).get();
 
         return new NaiveKey(d, n);
     }
