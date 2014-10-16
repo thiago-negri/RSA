@@ -18,7 +18,7 @@ public class AmbdekarFactorization implements FactorMethod {
 		while (true) {
 			square = ceil.multiply(ceil).subtract(BigInteger.ONE);
 			EuclideanFinder eculides = new EuclideanFinder();
-			BigInteger gcd = eculides.greatestCommonDivisor(n, square);
+			BigInteger gcd = eculides.greatestCommonDivisor(square, n);
 			if (gcd.compareTo(BigInteger.ONE) == 1) {
 				//gcd is a factor of n
 				return new Factors(gcd, n.divide(gcd));
